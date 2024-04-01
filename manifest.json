@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Virtu.hunter",
+  "version": "1.0",
+  "description": "Enhance your job hunting experience.",
+  "permissions": ["activeTab", "storage"],
+  "options_page": "index.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./src/content/main.jsx"]
+    }
+  ],
+  "action": { "default_popup": "popup.html" }
+}
