@@ -7,13 +7,13 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="lg:container mx-auto">
+    <div className='lg:container mx-4 lg:mx-auto'>
       <Router>
         <HeaderNavbar />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/form" element={<FormPage />} />
+          <Route path='/' element={<HomePage />} />
+          <Route path='/home' element={<HomePage />} />
+          <Route path='/form' element={<FormPage />} />
         </Routes>
         <Footer />
       </Router>
