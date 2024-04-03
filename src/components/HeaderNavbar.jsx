@@ -11,7 +11,8 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  useTheme
+  useTheme,
+  Dialog
 } from '@material-tailwind/react';
 import {
   ChevronDownIcon,
@@ -32,6 +33,7 @@ import {
 import ThemeToggle from './ThemeToggle';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { DEFAULT_THEME } from '../consts';
+import Login from './Login';
 
 const navListMenuItems = [
   {
@@ -156,14 +158,14 @@ function NavListMenu() {
 function NavList() {
   return (
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-      <Typography as="a" href="#" variant="small" className="font-medium">
+      <Typography as="a" href="home" variant="small" className="font-medium">
         <ListItem
           className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
         >
           Home
         </ListItem>
       </Typography>
-      <Typography as="a" href="#" variant="small" className="font-medium">
+      <Typography as="a" href="profile" variant="small" className="font-medium">
         <ListItem
           className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
         >
@@ -177,7 +179,7 @@ function NavList() {
           Configuration
         </ListItem>
       </Typography>
-      <Typography as="a" href="#" variant="small" className="font-medium">
+      <Typography as="a" href="board" variant="small" className="font-medium">
         <ListItem
           className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
         >
@@ -189,8 +191,9 @@ function NavList() {
   );
 }
 
-const renderActionButtons = () => {
+const renderActionButtons = (setOpen, open) => {
   const sharedStyles = `whitespace-nowrap`;
+  const handleOpen = () => setOpen((cur) => !cur);
   return (
     <>
       <ThemeToggle />
@@ -200,9 +203,18 @@ const renderActionButtons = () => {
         color="indigo"
         fullWidth
         className={sharedStyles}
+        onClick={handleOpen}
       >
         Log In
       </Button>
+      <Dialog
+        size="xs"
+        open={open}
+        handler={handleOpen}
+        className="bg-transparent shadow-none"
+      >
+        <Login />
+      </Dialog>
     </>
   );
 };
@@ -210,6 +222,8 @@ const renderActionButtons = () => {
 export default function HeaderNavbar() {
   const [openNav, setOpenNav] = React.useState(false);
   const [theme] = useLocalStorage('theme', DEFAULT_THEME);
+
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -235,7 +249,7 @@ export default function HeaderNavbar() {
           <NavList />
         </div>
         <div className="hidden gap-2 lg:flex">
-          {!openNav && renderActionButtons()}
+          {!openNav && renderActionButtons(setOpen, open)}
         </div>
         <IconButton
           variant="text"
@@ -253,7 +267,7 @@ export default function HeaderNavbar() {
       <Collapse open={openNav}>
         <NavList />
         <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-          {openNav && renderActionButtons()}
+          {openNav && renderActionButtons(setOpen, open)}
         </div>
       </Collapse>
     </Navbar>
