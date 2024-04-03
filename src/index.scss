@@ -1,11 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'assets/styles/theme.scss';
 
 body {
-  @apply bg-indigo-50/70;
+  &.light {
+    $system: (
+      bodyBg: 'colors.#{$base}.100/70',
+    );
+
+    background: theme(map-deep-get($system, bodyBg));
+  }
 
   &.dark {
-    @apply bg-gray-900;
+    $system: (
+      bodyBg: 'colors.#{$base}.900',
+    );
+
+    background: theme(map-deep-get($system, bodyBg));
   }
 }

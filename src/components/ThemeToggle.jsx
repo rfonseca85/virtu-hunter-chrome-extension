@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ThemeType, DEFAULT_THEME } from '../consts';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { Switch } from '@material-tailwind/react';
+import '../assets/styles/ThemeToggle.scss';
 
 function ThemeToggle() {
   const [localTheme, saveLocalTheme] = useLocalStorage('theme', DEFAULT_THEME);
@@ -18,7 +19,8 @@ function ThemeToggle() {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle('dark', isDark);
+    document.body.classList.toggle(ThemeType.DARK, isDark);
+    document.body.classList.toggle(ThemeType.LIGHT, !isDark);
   }, [theme]);
 
   const toggleTheme = () => {
@@ -33,7 +35,7 @@ function ThemeToggle() {
       onClick={toggleTheme}
       defaultChecked={isDark}
       ripple={false}
-      className='h-full w-full checked:bg-gray-900 bg-indigo-50'
+      className='v-theme-switch h-full w-full'
       containerProps={{
         className: 'w-11 h-6',
       }}

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../assets/styles/Header.scss';
 import {
   Navbar,
   Collapse,
@@ -83,25 +84,17 @@ function NavListMenu() {
   const renderItems = navListMenuItems.map(
     ({ icon, title, description }, key) => (
       <a href='#' key={key}>
-        <MenuItem className='flex items-center gap-3 rounded-lg hover:bg-indigo-500/10 active:bg-indigo-500/20 focus:bg-indigo-500/20'>
-          <div className='flex items-center justify-center rounded-lg !bg-indigo-50/50 dark:!bg-indigo-900/50 p-2 '>
+        <MenuItem className='v-menu-item'>
+          <div className='v-icon'>
             {' '}
             {React.createElement(icon, {
               strokeWidth: 2,
-              className: 'h-6 text-indigo-300 dark:text-indigo-100 w-6',
+              className: 'h-6 w-6',
             })}
           </div>
           <div>
-            <Typography
-              variant='h6'
-              className={`flex items-center text-sm font-bold text-indigo-500 dark:text-indigo-500`}
-            >
-              {title}
-            </Typography>
-            <Typography
-              variant='paragraph'
-              className={`text-xs !font-medium text-indigo-200`}
-            >
+            <Typography variant='h6'>{title}</Typography>
+            <Typography variant='paragraph' className={`text-xs !font-medium`}>
               {description}
             </Typography>
           </div>
@@ -122,7 +115,7 @@ function NavListMenu() {
         <MenuHandler>
           <Typography as='div' variant='small' className='font-medium'>
             <ListItem
-              className={`flex items-center gap-2 py-2 pr-4 font-medium bg-transparent ${sharedLinkBgStyles}`}
+              className='v-list'
               selected={isMenuOpen || isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen((cur) => !cur)}
             >
@@ -142,7 +135,7 @@ function NavListMenu() {
             </ListItem>
           </Typography>
         </MenuHandler>
-        <MenuList className='hidden max-w-screen-xl border-0 rounded-xl lg:block bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur'>
+        <MenuList className='v-menu-list'>
           <ul className='grid grid-cols-3 gap-y-2 outline-none outline-0'>
             {renderItems}
           </ul>
@@ -159,32 +152,16 @@ function NavList() {
   return (
     <List className='mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1'>
       <Typography as='a' href='home' variant='small' className='font-medium'>
-        <ListItem
-          className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
-        >
-          Home
-        </ListItem>
+        <ListItem className='v-list'>Home</ListItem>
       </Typography>
       <Typography as='a' href='profile' variant='small' className='font-medium'>
-        <ListItem
-          className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
-        >
-          Profile
-        </ListItem>
+        <ListItem className='v-list'>Profile</ListItem>
       </Typography>
       <Typography as='a' href='#' variant='small' className='font-medium'>
-        <ListItem
-          className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
-        >
-          Configuration
-        </ListItem>
+        <ListItem className='v-list'>Configuration</ListItem>
       </Typography>
       <Typography as='a' href='board' variant='small' className='font-medium'>
-        <ListItem
-          className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
-        >
-          Job Board
-        </ListItem>
+        <ListItem className='v-list'>Job Board</ListItem>
       </Typography>
       <NavListMenu />
     </List>
@@ -192,7 +169,6 @@ function NavList() {
 }
 
 const renderActionButtons = (setOpen, open) => {
-  const sharedStyles = `whitespace-nowrap`;
   const handleOpen = () => setOpen((cur) => !cur);
   return (
     <>
@@ -202,7 +178,6 @@ const renderActionButtons = (setOpen, open) => {
         size='sm'
         color='indigo'
         fullWidth
-        className={sharedStyles}
         onClick={handleOpen}
       >
         Log In
@@ -222,7 +197,6 @@ const renderActionButtons = (setOpen, open) => {
 export default function HeaderNavbar() {
   const [openNav, setOpenNav] = React.useState(false);
   const [theme] = useLocalStorage('theme', DEFAULT_THEME);
-
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -233,11 +207,8 @@ export default function HeaderNavbar() {
   }, []);
 
   return (
-    <Navbar
-      fullWidth
-      className='mx-auto mt-4 px-4 py-2 rounded-lg border-0 dark:bg-gray-800'
-    >
-      <div className='flex items-center justify-between text-blue-gray-900'>
+    <Navbar fullWidth className='virtu-header'>
+      <div className='flex items-center justify-between'>
         <a href='http://localhost:3000/' className='flex items-center'>
           <img
             src={`src/assets/img/virtuhunter-${theme}.svg`}
@@ -254,7 +225,7 @@ export default function HeaderNavbar() {
         <IconButton
           variant='text'
           color='gray'
-          className='lg:hidden dark:text-gray-50'
+          className='button-icon lg:hidden'
           onClick={() => setOpenNav(!openNav)}
         >
           {openNav ? (
