@@ -1,4 +1,5 @@
 import React from 'react';
+import '../assets/styles/Header.scss';
 import {
   Navbar,
   Collapse,
@@ -81,34 +82,22 @@ const navListMenuItems = [
   },
 ];
 
-const sharedLinkBgStyles = `hover:bg-indigo-900/10 focus:bg-indigo-900/10 active:bg-indigo-900/10 text-gray-900
-  dark:hover:bg-indigo-900/20 dark:focus:bg-indigo-900/20 dark:active:bg-indigo-900/20 dark:text-gray-50`;
-
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const renderItems = navListMenuItems.map(
     ({ icon, title, description }, key) => (
       <a href='#' key={key}>
-        <MenuItem className='flex items-center gap-3 rounded-lg hover:bg-indigo-500/10 active:bg-indigo-500/20 focus:bg-indigo-500/20'>
-          <div className='flex items-center justify-center rounded-lg !bg-indigo-50/50 dark:!bg-indigo-900/50 p-2 '>
-            {' '}
+        <MenuItem className='v-menu-item'>
+          <div className='v-icon'>
             {React.createElement(icon, {
               strokeWidth: 2,
-              className: 'h-6 text-indigo-300 dark:text-indigo-100 w-6',
+              className: 'h-6 w-6',
             })}
           </div>
           <div>
-            <Typography
-              variant='h6'
-              className={`flex items-center text-sm font-bold text-indigo-500 dark:text-indigo-500`}
-            >
-              {title}
-            </Typography>
-            <Typography
-              variant='paragraph'
-              className={`text-xs !font-medium text-indigo-200`}
-            >
+            <Typography variant='h6'>{title}</Typography>
+            <Typography variant='paragraph' className={`text-xs !font-medium`}>
               {description}
             </Typography>
           </div>
@@ -129,7 +118,7 @@ function NavListMenu() {
         <MenuHandler>
           <Typography as='div' variant='small' className='font-medium'>
             <ListItem
-              className={`flex items-center gap-2 py-2 pr-4 font-medium bg-transparent ${sharedLinkBgStyles}`}
+              className='v-list'
               selected={isMenuOpen || isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen((cur) => !cur)}
             >
@@ -149,7 +138,7 @@ function NavListMenu() {
             </ListItem>
           </Typography>
         </MenuHandler>
-        <MenuList className='hidden max-w-screen-xl border-0 rounded-xl lg:block bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur'>
+        <MenuList className='v-menu-list'>
           <ul className='grid grid-cols-3 gap-y-2 outline-none outline-0'>
             {renderItems}
           </ul>
@@ -166,19 +155,11 @@ function NavList() {
   return (
     <List className='mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1'>
       <Typography as='a' href='#' variant='small' className='font-medium'>
-        <ListItem
-          className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
-        >
-          Home
-        </ListItem>
+        <ListItem className='v-list'>Home</ListItem>
       </Typography>
       <NavListMenu />
       <Typography as='a' href='#' variant='small' className='font-medium'>
-        <ListItem
-          className={`flex items-center gap-2 py-2 pr-4  ${sharedLinkBgStyles}`}
-        >
-          Contact Us
-        </ListItem>
+        <ListItem className='v-list'>Contact Us</ListItem>
       </Typography>
     </List>
   );
@@ -223,11 +204,8 @@ export default function HeaderNavbar() {
   }, []);
 
   return (
-    <Navbar
-      fullWidth
-      className='mx-auto mt-4 px-4 py-2 rounded-lg border-0 dark:bg-gray-800'
-    >
-      <div className='flex items-center justify-between text-blue-gray-900'>
+    <Navbar fullWidth className='virtu-header'>
+      <div className='flex items-center justify-between'>
         <a href='http://localhost:3000/' className='flex items-center'>
           <img
             src={`src/assets/img/virtuhunter-${theme}.svg`}
@@ -243,8 +221,7 @@ export default function HeaderNavbar() {
         </div>
         <IconButton
           variant='text'
-          color='gray'
-          className='lg:hidden dark:text-gray-50'
+          className='button-icon lg:hidden'
           onClick={() => setOpenNav(!openNav)}
         >
           {openNav ? (

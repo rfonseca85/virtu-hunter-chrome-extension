@@ -1,0 +1,9 @@
+@import './theme.scss';
+
+.v-theme-switch {
+  background-color: theme('colors.#{$primary}.100/.6') !important;
+
+  &:checked {
+    background-color: theme('colors.#{$base}.800/.5') !important;
+  }
+}

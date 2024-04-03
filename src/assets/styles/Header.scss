@@ -1,0 +1,171 @@
+@import './theme.scss';
+
+.light {
+  $system: (
+    bodyBg: 'colors.white',
+    mobileButtonColor: 'colors.#{$base}.900',
+    list: (
+      color: 'colors.#{$base}.900',
+      mouseActionBg: 'colors.#{$primary}.900/.1',
+      mouseActionColor: 'colors.#{$primary}.400',
+      menuBg: 'colors.#{$base}.50/.5',
+      menuItem: (
+        hover: 'colors.#{$primary}.500/.1',
+        activeFocus: 'colors.#{$primary}.500/.2',
+        iconBg: 'colors.#{$primary}.100/.5',
+        svgColor: 'colors.#{$primary}.300',
+        h6: 'colors.#{$primary}.500',
+        p: 'colors.#{$primary}.200',
+      ),
+    ),
+  );
+
+  .virtu-header {
+    background-color: theme(map-deep-get($system, bodyBg)) !important;
+
+    .button-icon {
+      color: theme(map-deep-get($system, mobileButtonColor));
+    }
+
+    .v-list {
+      color: theme(map-deep-get($system, list, color));
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: theme(map-deep-get($system, list, mouseActionColor));
+        background-color: theme(map-deep-get($system, list, mouseActionBg));
+      }
+    }
+  }
+
+  .v-menu-list {
+    background-color: theme(map-deep-get($system, list, menuBg));
+
+    .v-menu-item {
+      .v-icon {
+        background-color: theme(
+          map-deep-get($system, list, menuItem, iconBg)
+        ) !important;
+        svg {
+          color: theme(
+            map-deep-get($system, list, menuItem, svgColor)
+          ) !important;
+        }
+      }
+      h6 {
+        color: theme(map-deep-get($system, list, menuItem, h6));
+      }
+      p {
+        color: theme(map-deep-get($system, list, menuItem, p));
+      }
+
+      &:hover {
+        background-color: theme(map-deep-get($system, list, menuItem, hover));
+      }
+      &:active,
+      &:focus {
+        background-color: theme(
+          map-deep-get($system, list, menuItem, activeFocus)
+        );
+      }
+    }
+  }
+}
+
+.dark {
+  $system: (
+    bodyBg: 'colors.black/.4',
+    mobileButtonColor: 'colors.#{$base}.50',
+    list: (
+      color: 'colors.#{$base}.50',
+      mouseActionBg: 'colors.#{$primary}.900/.2',
+      mouseActionColor: 'colors.#{$primary}.200',
+      menuBg: 'colors.black/.6',
+      menuItem: (
+        hover: 'colors.#{$primary}.500/.2',
+        activeFocus: 'colors.#{$primary}.500/.3',
+        iconBg: 'colors.#{$primary}.600/.3',
+        svgColor: 'colors.#{$primary}.50',
+        h6: 'colors.#{$primary}.500',
+        p: 'colors.#{$primary}.200',
+      ),
+    ),
+  );
+
+  .virtu-header {
+    background-color: theme(map-deep-get($system, bodyBg)) !important;
+
+    .button-icon {
+      color: theme(map-deep-get($system, mobileButtonColor));
+    }
+
+    .v-list {
+      color: theme(map-deep-get($system, list, color));
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: theme(map-deep-get($system, list, mouseActionColor));
+        background-color: theme(map-deep-get($system, list, mouseActionBg));
+      }
+    }
+  }
+
+  .v-menu-list {
+    background-color: theme(map-deep-get($system, list, menuBg));
+
+    .v-menu-item {
+      .v-icon {
+        background-color: theme(
+          map-deep-get($system, list, menuItem, iconBg)
+        ) !important;
+        svg {
+          color: theme(
+            map-deep-get($system, list, menuItem, svgColor)
+          ) !important;
+        }
+      }
+      h6 {
+        color: theme(map-deep-get($system, list, menuItem, h6));
+      }
+      p {
+        color: theme(map-deep-get($system, list, menuItem, p));
+      }
+
+      &:hover {
+        background-color: theme(map-deep-get($system, list, menuItem, hover));
+      }
+      &:active,
+      &:focus {
+        background-color: theme(
+          map-deep-get($system, list, menuItem, activeFocus)
+        );
+      }
+    }
+  }
+}
+
+.virtu-header {
+  @apply mx-auto mt-4 px-4 py-2 rounded-lg border-0 #{!important};
+
+  .v-list {
+    @apply flex items-center gap-2 py-2 pr-4 font-medium bg-transparent;
+  }
+}
+
+.v-menu-list {
+  @apply hidden max-w-screen-xl rounded-xl lg:block backdrop-blur;
+  @apply border-0 #{!important};
+
+  .v-menu-item {
+    @apply flex items-center gap-3 rounded-lg;
+
+    .v-icon {
+      @apply flex items-center justify-center rounded-lg p-2;
+    }
+    h6 {
+      @apply flex items-center text-sm font-bold #{!important};
+    }
+  }
+}
