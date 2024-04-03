@@ -1,19 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import HeaderNavbar from './components/HeaderNavbar';
-import HomePage from './pages/HomePage';
-import FormPage from './pages/FormPage';
+import Home from './pages/Home';
 import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className='lg:container mx-4 lg:mx-auto'>
+    <div className="lg:container mx-4 lg:mx-auto">
       <Router>
         <HeaderNavbar />
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/home' element={<HomePage />} />
-          <Route path='/form' element={<FormPage />} />
+          <Route path="/*" element={<Home />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
         <Footer />
       </Router>
