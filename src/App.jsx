@@ -8,14 +8,14 @@ import JobBoard from './pages/JobBoard';
 
 function App() {
   return (
-    <div className="lg:container mx-4 lg:mx-auto">
+    <div className='lg:container mx-4 lg:mx-auto'>
       <Router>
         <HeaderNavbar />
         <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/board" element={<JobBoard />} />
+          <Route path='/*' element={<Home />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/board' element={<JobBoard />} />
         </Routes>
         <Footer />
       </Router>
