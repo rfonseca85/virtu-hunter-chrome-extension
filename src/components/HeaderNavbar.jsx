@@ -13,6 +13,7 @@ import {
   MenuList,
   MenuItem,
   useTheme,
+  Dialog,
 } from '@material-tailwind/react';
 import {
   ChevronDownIcon,
@@ -33,54 +34,49 @@ import {
 import ThemeToggle from './ThemeToggle';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { DEFAULT_THEME } from '../consts';
+import Login from './Login';
 
 const navListMenuItems = [
   {
-    title: 'Products',
-    description: 'Find the perfect solution for your needs.',
+    title: 'Cover Letter',
+    description:
+      'Crafting a bespoke cover letter tailored precisely to align with your resume and the specific requirements of the job you are pursuing.',
     icon: SquaresPlusIcon,
   },
   {
-    title: 'About Us',
-    description: 'Meet and learn about our dedication',
-    icon: UserGroupIcon,
+    title: 'Resume Analysis',
+    description:
+      'Evaluate your resume, providing a comprehensive score, and suggest potential enhancements.',
+    icon: SquaresPlusIcon,
   },
   {
-    title: 'Blog',
-    description: 'Find the perfect solution for your needs.',
-    icon: Bars4Icon,
+    title: 'Resume Summary',
+    description:
+      'Creating a custom Resume summary meticulously crafted to perfectly match the unique requirements of the job you are aiming for.',
+    icon: SquaresPlusIcon,
   },
   {
-    title: 'Services',
-    description: 'Learn how we can help you achieve your goals.',
-    icon: SunIcon,
+    title: 'Resume Translation',
+    description:
+      'Harness the power of AI for flawless translation of your resume into any desired language with unparalleled accuracy.',
+    icon: SquaresPlusIcon,
   },
   {
-    title: 'Support',
-    description: 'Reach out to us for assistance or inquiries',
-    icon: GlobeAmericasIcon,
+    title: 'Interview Simulation',
+    description:
+      'Provides invaluable insights and a comprehensive Q&A tailored to the company, our tips aim to equip you with the necessary tools for interview preparation.',
+    icon: SquaresPlusIcon,
   },
   {
-    title: 'Contact',
-    description: 'Find the perfect solution for your needs.',
-    icon: PhoneIcon,
-  },
-  {
-    title: 'News',
-    description: 'Read insightful articles, tips, and expert opinions.',
-    icon: NewspaperIcon,
-  },
-  {
-    title: 'Products',
-    description: 'Find the perfect solution for your needs.',
-    icon: RectangleGroupIcon,
-  },
-  {
-    title: 'Special Offers',
-    description: 'Explore limited-time deals and bundles',
-    icon: TagIcon,
+    title: 'Interview Helper',
+    description:
+      'A remarkable tool designed to assist you during your actual interview by capturing all the questions posed by the interviewer and furnishing concise, bullet-point responses for easy reference.',
+    icon: SquaresPlusIcon,
   },
 ];
+
+const sharedLinkBgStyles = `hover:bg-indigo-900/10 focus:bg-indigo-900/10 active:bg-indigo-900/10 text-gray-900
+  dark:hover:bg-indigo-900/20 dark:focus:bg-indigo-900/20 dark:active:bg-indigo-900/20 dark:text-gray-50`;
 
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -90,6 +86,7 @@ function NavListMenu() {
       <a href='#' key={key}>
         <MenuItem className='v-menu-item'>
           <div className='v-icon'>
+            {' '}
             {React.createElement(icon, {
               strokeWidth: 2,
               className: 'h-6 w-6',
@@ -122,7 +119,7 @@ function NavListMenu() {
               selected={isMenuOpen || isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen((cur) => !cur)}
             >
-              Resources
+              AI Tools
               <ChevronDownIcon
                 strokeWidth={2.5}
                 className={`hidden h-3 w-3 transition-transform lg:block ${
@@ -154,19 +151,25 @@ function NavListMenu() {
 function NavList() {
   return (
     <List className='mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1'>
-      <Typography as='a' href='#' variant='small' className='font-medium'>
+      <Typography as='a' href='home' variant='small' className='font-medium'>
         <ListItem className='v-list'>Home</ListItem>
       </Typography>
-      <NavListMenu />
-      <Typography as='a' href='#' variant='small' className='font-medium'>
-        <ListItem className='v-list'>Contact Us</ListItem>
+      <Typography as='a' href='profile' variant='small' className='font-medium'>
+        <ListItem className='v-list'>Profile</ListItem>
       </Typography>
+      <Typography as='a' href='#' variant='small' className='font-medium'>
+        <ListItem className='v-list'>Configuration</ListItem>
+      </Typography>
+      <Typography as='a' href='board' variant='small' className='font-medium'>
+        <ListItem className='v-list'>Job Board</ListItem>
+      </Typography>
+      <NavListMenu />
     </List>
   );
 }
 
-const renderActionButtons = () => {
-  const sharedStyles = `whitespace-nowrap`;
+const renderActionButtons = (setOpen, open) => {
+  const handleOpen = () => setOpen((cur) => !cur);
   return (
     <>
       <ThemeToggle />
@@ -175,19 +178,18 @@ const renderActionButtons = () => {
         size='sm'
         color='indigo'
         fullWidth
-        className={sharedStyles}
+        onClick={handleOpen}
       >
         Log In
       </Button>
-      <Button
-        variant='gradient'
-        size='sm'
-        color='amber'
-        fullWidth
-        className={sharedStyles}
+      <Dialog
+        size='xs'
+        open={open}
+        handler={handleOpen}
+        className='bg-transparent shadow-none'
       >
-        Sign In
-      </Button>
+        <Login />
+      </Dialog>
     </>
   );
 };
@@ -195,6 +197,7 @@ const renderActionButtons = () => {
 export default function HeaderNavbar() {
   const [openNav, setOpenNav] = React.useState(false);
   const [theme] = useLocalStorage('theme', DEFAULT_THEME);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -217,10 +220,11 @@ export default function HeaderNavbar() {
           <NavList />
         </div>
         <div className='hidden gap-2 lg:flex'>
-          {!openNav && renderActionButtons()}
+          {!openNav && renderActionButtons(setOpen, open)}
         </div>
         <IconButton
           variant='text'
+          color='gray'
           className='button-icon lg:hidden'
           onClick={() => setOpenNav(!openNav)}
         >
@@ -234,7 +238,7 @@ export default function HeaderNavbar() {
       <Collapse open={openNav}>
         <NavList />
         <div className='flex w-full flex-nowrap items-center gap-2 lg:hidden'>
-          {openNav && renderActionButtons()}
+          {openNav && renderActionButtons(setOpen, open)}
         </div>
       </Collapse>
     </Navbar>

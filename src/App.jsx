@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import HeaderNavbar from './components/HeaderNavbar';
-import HomePage from './pages/HomePage';
-import FormPage from './pages/FormPage';
+import Home from './pages/Home';
 import Footer from './components/Footer';
+import Profile from './pages/Profile';
+import JobBoard from './pages/JobBoard';
 
 function App() {
   return (
@@ -11,9 +12,10 @@ function App() {
       <Router>
         <HeaderNavbar />
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/home' element={<HomePage />} />
-          <Route path='/form' element={<FormPage />} />
+          <Route path='/*' element={<Home />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/board' element={<JobBoard />} />
         </Routes>
         <Footer />
       </Router>
