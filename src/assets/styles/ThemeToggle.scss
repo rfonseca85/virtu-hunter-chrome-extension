@@ -1,9 +1,17 @@
 @import './theme.scss';
 
+$switchColor: $base;
+
 .v-theme-switch {
-  background-color: theme('colors.#{$primary}.100/.6') !important;
+  background-color: theme('colors.#{$switchColor}.800') !important;
+  & + label {
+    background-color: theme('colors.#{$base}.50/.8') !important;
+  }
 
   &:checked {
-    background-color: theme('colors.#{$base}.800/.5') !important;
+    background-color: theme('colors.#{$switchColor}.50') !important;
+    & + label {
+      background-color: theme('colors.#{$base}.900/.8') !important;
+    }
   }
 }
