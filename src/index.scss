@@ -6,7 +6,7 @@
 body {
   &.light {
     $system: (
-      bodyBg: 'colors.#{$base}.100/70',
+      bodyBg: 'colors.#{$base}.50',
     );
 
     background: theme(map-deep-get($system, bodyBg));

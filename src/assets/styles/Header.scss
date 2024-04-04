@@ -2,26 +2,25 @@
 
 .light {
   $system: (
-    bodyBg: 'colors.white',
     mobileButtonColor: 'colors.#{$base}.900',
     list: (
       color: 'colors.#{$base}.900',
-      mouseActionBg: 'colors.#{$primary}.900/.1',
-      mouseActionColor: 'colors.#{$primary}.400',
-      menuBg: 'colors.#{$base}.50/.5',
+      mouseActionBg: 'colors.#{$primary}.100/.4',
+      mouseActionColor: 'colors.#{$primary}.700',
+      menuBg: 'colors.#{$base}.300/.5',
       menuItem: (
-        hover: 'colors.#{$primary}.500/.1',
-        activeFocus: 'colors.#{$primary}.500/.2',
-        iconBg: 'colors.#{$primary}.100/.5',
-        svgColor: 'colors.#{$primary}.300',
-        h6: 'colors.#{$primary}.500',
-        p: 'colors.#{$primary}.200',
+        hover: 'colors.#{$primary}.300/.1',
+        activeFocus: 'colors.#{$primary}.300/.2',
+        iconBg: 'colors.#{$primary}.300',
+        svgColor: 'colors.white',
+        h6: 'colors.#{$primary}.800',
+        p: 'colors.#{$base}.900/.7',
       ),
     ),
   );
 
   .virtu-header {
-    background-color: theme(map-deep-get($system, bodyBg)) !important;
+    background-color: transparent !important;
 
     .button-icon {
       color: theme(map-deep-get($system, mobileButtonColor));
@@ -75,26 +74,25 @@
 
 .dark {
   $system: (
-    bodyBg: 'colors.black/.4',
     mobileButtonColor: 'colors.#{$base}.50',
     list: (
       color: 'colors.#{$base}.50',
-      mouseActionBg: 'colors.#{$primary}.900/.2',
-      mouseActionColor: 'colors.#{$primary}.200',
-      menuBg: 'colors.black/.6',
+      mouseActionBg: 'colors.#{$primary}.300/.1',
+      mouseActionColor: 'colors.#{$primary}.300',
+      menuBg: 'colors.black/.7',
       menuItem: (
-        hover: 'colors.#{$primary}.500/.2',
-        activeFocus: 'colors.#{$primary}.500/.3',
-        iconBg: 'colors.#{$primary}.600/.3',
-        svgColor: 'colors.#{$primary}.50',
-        h6: 'colors.#{$primary}.500',
-        p: 'colors.#{$primary}.200',
+        hover: 'colors.#{$primary}.300/.2',
+        activeFocus: 'colors.#{$primary}.300/.3',
+        iconBg: 'colors.#{$primary}.300',
+        svgColor: 'colors.#{$base}.900',
+        h6: 'colors.#{$primary}.300',
+        p: 'colors.#{$base}.50',
       ),
     ),
   );
 
   .virtu-header {
-    background-color: theme(map-deep-get($system, bodyBg)) !important;
+    background-color: transparent !important;
 
     .button-icon {
       color: theme(map-deep-get($system, mobileButtonColor));
@@ -147,7 +145,7 @@
 }
 
 .virtu-header {
-  @apply mx-auto mt-4 px-4 py-2 rounded-lg border-0 #{!important};
+  @apply mx-auto mt-4 px-4 py-2 rounded-lg border-0 shadow-none #{!important};
 
   .v-list {
     @apply flex items-center gap-2 py-2 pr-4 font-medium bg-transparent;

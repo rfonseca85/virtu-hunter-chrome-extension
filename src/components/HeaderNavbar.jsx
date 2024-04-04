@@ -141,7 +141,7 @@ function NavListMenu() {
           </ul>
         </MenuList>
       </Menu>
-      <div className='block lg:hidden'>
+      <div className='v-menu-list block lg:hidden'>
         <Collapse open={isMobileMenuOpen}>{renderItems}</Collapse>
       </div>
     </React.Fragment>
@@ -163,7 +163,7 @@ function NavList() {
       <Typography as='a' href='board' variant='small' className='font-medium'>
         <ListItem className='v-list'>Job Board</ListItem>
       </Typography>
-      <NavListMenu />
+      <NavListMenu /> {/* AI tools */}
     </List>
   );
 }
@@ -174,10 +174,9 @@ const renderActionButtons = (setOpen, open) => {
     <>
       <ThemeToggle />
       <Button
-        variant='gradient'
         size='sm'
-        color='indigo'
         fullWidth
+        className='v-primary-button'
         onClick={handleOpen}
       >
         Log In
@@ -224,10 +223,10 @@ export default function HeaderNavbar() {
         </div>
         <IconButton
           variant='text'
-          color='gray'
           className='button-icon lg:hidden'
           onClick={() => setOpenNav(!openNav)}
         >
+          {/* hamburger button */}
           {openNav ? (
             <XMarkIcon className='h-6 w-6' strokeWidth={2} />
           ) : (
