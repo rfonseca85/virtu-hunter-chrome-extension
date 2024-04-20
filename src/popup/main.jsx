@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import PopupApp from './PopupApp';
-import './PopupApp.css';
+import '../index.scss';
+
+import { ThemeProvider } from '@material-tailwind/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <PopupApp />
+    <ThemeProvider>
+      <PopupApp />
+    </ThemeProvider>
   </React.StrictMode>
 );
