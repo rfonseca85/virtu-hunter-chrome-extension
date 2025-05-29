@@ -117,4 +117,8 @@ If you like this project, please consider <a href="https://github.com/rfonseca85
 
 ## 📄 License
 
-MIT 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. You may use, share, and adapt the code for personal and non-commercial purposes only. Commercial use is **not permitted**.
+
+See the [LICENSE](LICENSE) file for details. 
