@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import {
+  FiChevronDown,
+  FiChevronUp,
+  FiCopy,
+  FiTrash2,
+  FiPlus
+} from 'react-icons/fi';
 
 const categories = [
   {
@@ -91,12 +97,25 @@ const validators = {
   linkedin: (v) => (v && !/^https?:\/\/.+\..+/.test(v) ? 'Invalid URL' : '')
 };
 
+function generateId() {
+  return 'profile_' + Math.random().toString(36).slice(2, 10);
+}
+
+const emptyProfile = (name = 'New Profile') => ({
+  name,
+  // All fields empty
+  ...Object.fromEntries(
+    categories.flatMap((cat) => cat.fields.map((f) => [f.key, '']))
+  )
+});
+
 const ProfileSection = () => {
+  const [profiles, setProfiles] = useState({}); // {id: profileData}
+  const [activeProfileId, setActiveProfileId] = useState(null);
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState({});
   const [collapsed, setCollapsed] = useState(() => {
-    // All open by default
     const state = {};
     categories.forEach((cat) => {
       state[cat.key] = false;
@@ -105,13 +124,45 @@ const ProfileSection = () => {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [editingName, setEditingName] = useState(false);
+  const [newProfileName, setNewProfileName] = useState('');
 
+  // Load all profiles and activeProfileId
   useEffect(() => {
-    chrome.storage.local.get(['profile'], (result) => {
-      setProfile(result.profile || {});
+    chrome.storage.local.get(['profiles', 'activeProfileId'], (result) => {
+      const allProfiles = result.profiles || {};
+      let activeId = result.activeProfileId;
+      // If no profiles, create one
+      if (!Object.keys(allProfiles).length) {
+        const id = generateId();
+        allProfiles[id] = emptyProfile('Default Profile');
+        activeId = id;
+        chrome.storage.local.set({
+          profiles: allProfiles,
+          activeProfileId: id
+        });
+      }
+      setProfiles(allProfiles);
+      setActiveProfileId(activeId);
+      setProfile(allProfiles[activeId]);
       setLoading(false);
     });
   }, []);
+
+  // When activeProfileId changes, update profile
+  useEffect(() => {
+    if (activeProfileId && profiles[activeProfileId]) {
+      setProfile(profiles[activeProfileId]);
+    }
+  }, [activeProfileId, profiles]);
+
+  // Save profile changes
+  const saveProfile = (updatedProfile, cb) => {
+    const updatedProfiles = { ...profiles, [activeProfileId]: updatedProfile };
+    setProfiles(updatedProfiles);
+    setProfile(updatedProfile);
+    chrome.storage.local.set({ profiles: updatedProfiles }, cb);
+  };
 
   // Validate a single field
   const validateField = (key, value) => {
@@ -135,7 +186,6 @@ const ProfileSection = () => {
     const updated = { ...profile, [key]: value };
     setProfile(updated);
     setTouched((prev) => ({ ...prev, [key]: true }));
-    // Validate on change
     setErrors((prev) => ({ ...prev, [key]: validateField(key, value) }));
     setSaved({});
   };
@@ -150,7 +200,6 @@ const ProfileSection = () => {
 
   const handleSaveCategory = (catKey, fields) => (e) => {
     e.preventDefault();
-    // Validate all fields in this category
     const catErrors = validateCategory(fields);
     setErrors((prev) => ({ ...prev, ...catErrors }));
     setTouched((prev) => ({
@@ -162,7 +211,7 @@ const ProfileSection = () => {
     fields.forEach(({ key }) => {
       updatedProfile[key] = profile[key];
     });
-    chrome.storage.local.set({ profile: updatedProfile }, () => {
+    saveProfile(updatedProfile, () => {
       setSaved((prev) => ({ ...prev, [catKey]: true }));
       setTimeout(
         () => setSaved((prev) => ({ ...prev, [catKey]: false })),
@@ -175,58 +224,189 @@ const ProfileSection = () => {
     setCollapsed((prev) => ({ ...prev, [catKey]: !prev[catKey] }));
   };
 
+  // Profile management
+  const handleProfileSelect = (e) => {
+    const id = e.target.value;
+    setActiveProfileId(id);
+    chrome.storage.local.set({ activeProfileId: id });
+  };
+
+  const handleCreateProfile = () => {
+    const id = generateId();
+    const name = prompt('Enter a name for the new profile:', 'New Profile');
+    if (!name) return;
+    const newProfiles = { ...profiles, [id]: emptyProfile(name) };
+    setProfiles(newProfiles);
+    setActiveProfileId(id);
+    chrome.storage.local.set({ profiles: newProfiles, activeProfileId: id });
+  };
+
+  const handleDeleteProfile = () => {
+    if (Object.keys(profiles).length <= 1) {
+      alert('You must have at least one profile.');
+      return;
+    }
+    if (!window.confirm('Delete this profile? This cannot be undone.')) return;
+    const newProfiles = { ...profiles };
+    delete newProfiles[activeProfileId];
+    const nextId = Object.keys(newProfiles)[0];
+    setProfiles(newProfiles);
+    setActiveProfileId(nextId);
+    chrome.storage.local.set({
+      profiles: newProfiles,
+      activeProfileId: nextId
+    });
+  };
+
+  const handleDuplicateProfile = () => {
+    const id = generateId();
+    const name = prompt(
+      'Enter a name for the duplicated profile:',
+      profile.name + ' (Copy)'
+    );
+    if (!name) return;
+    const newProfile = { ...profile, name };
+    const newProfiles = { ...profiles, [id]: newProfile };
+    setProfiles(newProfiles);
+    setActiveProfileId(id);
+    chrome.storage.local.set({ profiles: newProfiles, activeProfileId: id });
+  };
+
+  const handleNameEdit = () => {
+    setEditingName(true);
+    setNewProfileName(profile.name);
+  };
+
+  const handleNameSave = () => {
+    if (!newProfileName.trim()) return;
+    const updatedProfile = { ...profile, name: newProfileName.trim() };
+    saveProfile(updatedProfile, () => setEditingName(false));
+  };
+
   if (loading)
     return <div className="p-6 bg-white rounded-xl shadow">Loading...</div>;
 
   return (
-    <form className="flex flex-col gap-4">
-      {categories.map((cat) => (
-        <div key={cat.key} className="bg-white border rounded-xl shadow">
-          <div
-            className="flex items-center justify-between cursor-pointer select-none px-4 py-2"
-            onClick={() => toggleCollapse(cat.key)}
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-3 mb-2">
+        <label
+          className="text-xs font-semibold text-gray-600 mr-2"
+          htmlFor="options-profile-select"
+        >
+          Profile
+        </label>
+        <select
+          id="options-profile-select"
+          value={activeProfileId}
+          onChange={handleProfileSelect}
+          className="border rounded px-2 py-1"
+        >
+          {Object.entries(profiles).map(([id, p]) => (
+            <option key={id} value={id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+        <Button
+          onClick={handleCreateProfile}
+          variant="secondary"
+          className="px-2 py-1"
+        >
+          <FiPlus size={16} />
+        </Button>
+        <Button
+          onClick={handleDuplicateProfile}
+          variant="secondary"
+          className="px-2 py-1"
+        >
+          <FiCopy size={16} />
+        </Button>
+        <Button
+          onClick={handleDeleteProfile}
+          variant="secondary"
+          className="px-2 py-1"
+        >
+          <FiTrash2 size={16} />
+        </Button>
+        {editingName ? (
+          <span className="flex items-center gap-1">
+            <input
+              className="border rounded px-2 py-1 text-sm"
+              value={newProfileName}
+              onChange={(e) => setNewProfileName(e.target.value)}
+              onBlur={handleNameSave}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleNameSave();
+              }}
+              autoFocus
+              style={{ width: 120 }}
+            />
+            <Button
+              onClick={handleNameSave}
+              variant="secondary"
+              className="px-2 py-1 text-xs"
+            >
+              Save
+            </Button>
+          </span>
+        ) : (
+          <span
+            className="ml-2 text-blue-700 font-semibold cursor-pointer"
+            onClick={handleNameEdit}
           >
-            <span className="font-semibold text-blue-700 flex items-center gap-2">
-              {cat.title}
-              <span className="ml-1">
-                {collapsed[cat.key] ? (
-                  <FiChevronDown size={18} />
-                ) : (
-                  <FiChevronUp size={18} />
-                )}
+            {profile.name}
+          </span>
+        )}
+      </div>
+      <form className="flex flex-col gap-4">
+        {categories.map((cat) => (
+          <div key={cat.key} className="bg-white border rounded-xl shadow">
+            <div
+              className="flex items-center justify-between cursor-pointer select-none px-4 py-2"
+              onClick={() => toggleCollapse(cat.key)}
+            >
+              <span className="font-semibold text-blue-700 flex items-center gap-2">
+                {cat.title}
+                <span className="ml-1">
+                  {collapsed[cat.key] ? (
+                    <FiChevronDown size={18} />
+                  ) : (
+                    <FiChevronUp size={18} />
+                  )}
+                </span>
               </span>
-            </span>
-          </div>
-          {!collapsed[cat.key] && (
-            <div className="flex flex-col gap-3 px-4 pb-4">
-              {cat.fields.map(({ key, label, type }) => (
-                <Input
-                  key={key}
-                  label={label}
-                  type={type || 'text'}
-                  value={profile[key] || ''}
-                  onChange={(e) => handleChange(key, e.target.value)}
-                  onBlur={() => handleBlur(key)}
-                  error={Boolean(errors[key] && touched[key])}
-                  helperText={touched[key] && errors[key] ? errors[key] : ''}
-                />
-              ))}
-              <div className="flex items-center gap-4 mt-2">
-                <Button
-                  type="button"
-                  onClick={handleSaveCategory(cat.key, cat.fields)}
-                >
-                  Save {cat.title}
-                </Button>
-                {saved[cat.key] && (
-                  <span className="text-green-600 text-sm">Saved!</span>
-                )}
-              </div>
             </div>
-          )}
-        </div>
-      ))}
-    </form>
+            {!collapsed[cat.key] && (
+              <div className="flex flex-col gap-3 px-4 pb-4">
+                {cat.fields.map(({ key, label, type }) => (
+                  <Input
+                    key={key}
+                    label={label}
+                    type={type || 'text'}
+                    value={profile[key] || ''}
+                    onChange={(e) => handleChange(key, e.target.value)}
+                    onBlur={() => handleBlur(key)}
+                    error={Boolean(errors[key] && touched[key])}
+                    helperText={touched[key] && errors[key] ? errors[key] : ''}
+                  />
+                ))}
+                <div className="flex items-center gap-4 mt-2">
+                  <Button
+                    type="button"
+                    onClick={handleSaveCategory(cat.key, cat.fields)}
+                  >
+                    Save {cat.title}
+                  </Button>
+                  {saved[cat.key] && (
+                    <span className="text-green-600 text-sm">Saved!</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </form>
+    </div>
   );
 };
 

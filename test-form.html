@@ -6,7 +6,7 @@
   <title>Virtu Hunter Autofill Test Form</title>
   <style>
     body { font-family: sans-serif; background: #f8f8f8; padding: 2rem; }
-    form { background: #fff; padding: 2rem; border-radius: 8px; max-width: 400px; margin: auto; box-shadow: 0 2px 8px #0001; }
+    form { background: #fff; padding: 2rem; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 8px #0001; }
     label { display: block; margin-top: 1.2em; font-weight: 500; }
     input, textarea { width: 100%; padding: 0.5em; margin-top: 0.3em; border: 1px solid #ccc; border-radius: 4px; }
     button { margin-top: 1.5em; padding: 0.7em 1.5em; border: none; border-radius: 4px; background: #2563eb; color: #fff; font-weight: 600; cursor: pointer; }
@@ -15,20 +15,77 @@
 <body>
   <h1>Virtu Hunter Autofill Test Form</h1>
   <form>
-    <label for="name">Full Name</label>
-    <input id="name" name="name" type="text" autocomplete="off">
+    <!-- Personal Info -->
+    <label for="firstName">First Name</label>
+    <input id="firstName" name="firstName" type="text" autocomplete="off">
 
-    <label for="email">Email Address</label>
+    <label for="lastName">Last Name</label>
+    <input id="lastName" name="lastName" type="text" autocomplete="off">
+
+    <label for="email">Email</label>
     <input id="email" name="email" type="email" autocomplete="off">
 
-    <label for="phone">Phone Number</label>
+    <label for="phone">Phone</label>
     <input id="phone" name="phone" type="tel" autocomplete="off">
 
+    <!-- Address -->
     <label for="address">Address</label>
     <input id="address" name="address" type="text" autocomplete="off">
 
-    <label for="bio">Short Bio</label>
-    <textarea id="bio" name="bio"></textarea>
+    <label for="city">City</label>
+    <input id="city" name="city" type="text" autocomplete="off">
+
+    <label for="province">Province/State</label>
+    <input id="province" name="province" type="text" autocomplete="off">
+
+    <label for="postalCode">Postal Code</label>
+    <input id="postalCode" name="postalCode" type="text" autocomplete="off">
+
+    <label for="country">Country</label>
+    <input id="country" name="country" type="text" autocomplete="off">
+
+    <!-- Online Profiles -->
+    <label for="website">Website, Blog, or Portfolio</label>
+    <input id="website" name="website" type="url" autocomplete="off">
+
+    <label for="linkedin">LinkedIn Profile URL</label>
+    <input id="linkedin" name="linkedin" type="url" autocomplete="off">
+
+    <label for="college">College/University</label>
+    <input id="college" name="college" type="text" autocomplete="off">
+
+    <!-- Application Details -->
+    <label for="dateAvailable">Date Available</label>
+    <input id="dateAvailable" name="dateAvailable" type="date" autocomplete="off">
+
+    <label for="desiredPay">Desired Pay</label>
+    <input id="desiredPay" name="desiredPay" type="text" autocomplete="off">
+
+    <!-- Referral & Motivation -->
+    <label for="referral">Who referred you for this position?</label>
+    <input id="referral" name="referral" type="text" autocomplete="off">
+
+    <label for="whyWork">Why do you want to work at [Company]?</label>
+    <input id="whyWork" name="whyWork" type="text" autocomplete="off">
+
+    <label for="managedDevs">Have you directly managed software developers previously? If so, how many?</label>
+    <input id="managedDevs" name="managedDevs" type="text" autocomplete="off">
+
+    <label for="agileExperience">Have you led an agile delivery process (scrum, kanban) for a team? Please briefly list some examples.</label>
+    <input id="agileExperience" name="agileExperience" type="text" autocomplete="off">
+
+    <label for="recentExample">Could you share a recent example where you have had hands on development experience?</label>
+    <input id="recentExample" name="recentExample" type="text" autocomplete="off">
+
+    <!-- Eligibility & Preferences -->
+    <label for="remoteEligible">Are you currently located in and legally eligible to work in Canada?</label>
+    <input id="remoteEligible" name="remoteEligible" type="text" autocomplete="off">
+
+    <label for="visaRequired">Will you require us to file for a visa petition on your behalf to allow you to work?</label>
+    <input id="visaRequired" name="visaRequired" type="text" autocomplete="off">
+
+    <label for="howHeard">How did you hear about this opportunity?</label>
+    <input id="howHeard" name="howHeard" type="text" autocomplete="off">
 
     <button type="submit">Submit</button>
   </form>

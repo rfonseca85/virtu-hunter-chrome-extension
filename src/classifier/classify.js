@@ -1,5 +1,6 @@
 import { loadUSE } from './useLoader';
 import { FIELD_CATEGORIES } from './categories';
+import { getEmbedding } from './embeddingCache';
 
 function cosineSimilarity(a, b) {
   let dot = 0.0,
@@ -15,13 +16,19 @@ function cosineSimilarity(a, b) {
 
 export async function classifyLabel(labelText, threshold = 0.75) {
   const model = await loadUSE();
-  const labelEmbedding = (await model.embed([labelText])).arraySync()[0];
+  // Use embedding cache for label
+  const labelEmbedding = await getEmbedding(labelText, async (text) => {
+    return (await model.embed([text])).arraySync()[0];
+  });
 
   let best = { category: null, score: 0 };
 
   for (const cat of FIELD_CATEGORIES) {
     for (const example of cat.examples) {
-      const exampleEmbedding = (await model.embed([example])).arraySync()[0];
+      // Use embedding cache for example
+      const exampleEmbedding = await getEmbedding(example, async (text) => {
+        return (await model.embed([text])).arraySync()[0];
+      });
       const score = cosineSimilarity(labelEmbedding, exampleEmbedding);
       if (score > best.score) {
         best = { category: cat, score };

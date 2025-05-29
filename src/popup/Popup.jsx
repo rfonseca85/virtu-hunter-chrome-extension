@@ -7,17 +7,30 @@ import logo from '../assets/img/logo-light.svg';
 
 const Popup = () => {
   const [enabled, setEnabled] = useState(false);
+  const [profiles, setProfiles] = useState({});
+  const [activeProfileId, setActiveProfileId] = useState('');
 
   useEffect(() => {
-    chrome.storage.local.get(['autofillEnabled'], (result) => {
-      setEnabled(!!result.autofillEnabled);
-    });
+    chrome.storage.local.get(
+      ['autofillEnabled', 'profiles', 'activeProfileId'],
+      (result) => {
+        setEnabled(!!result.autofillEnabled);
+        setProfiles(result.profiles || {});
+        setActiveProfileId(result.activeProfileId || '');
+      }
+    );
   }, []);
 
   const handleToggle = () => {
     const newValue = !enabled;
     setEnabled(newValue);
     chrome.storage.local.set({ autofillEnabled: newValue });
+  };
+
+  const handleProfileChange = (e) => {
+    const id = e.target.value;
+    setActiveProfileId(id);
+    chrome.storage.local.set({ activeProfileId: id });
   };
 
   const openOptions = () => {
@@ -47,6 +60,27 @@ const Popup = () => {
         <SectionTitle className="mb-1 text-center text-xl font-bold text-blue-700">
           Virtu Hunter
         </SectionTitle>
+        <div className="w-full flex flex-col items-center mb-2">
+          <label
+            className="text-xs font-semibold text-gray-600 mb-1"
+            htmlFor="popup-profile-select"
+          >
+            Profile
+          </label>
+          <select
+            id="popup-profile-select"
+            value={activeProfileId}
+            onChange={handleProfileChange}
+            className="border rounded px-2 py-1 text-sm mb-2"
+            style={{ minWidth: 180 }}
+          >
+            {Object.entries(profiles).map(([id, p]) => (
+              <option key={id} value={id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="text-gray-500 text-sm mb-4 text-center">
           Smart Job Form Autofill
         </div>

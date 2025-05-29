@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileSection from './ProfileSection';
 import DocumentsSection from './DocumentsSection';
 import SectionTitle from '../../components/common/SectionTitle';
+import Button from '../../components/common/Button';
+import { clearEmbeddingCache } from '../../classifier/embeddingCache';
 import {
   FiUser,
   FiFileText,
@@ -37,14 +39,58 @@ const CustomLabels = () => (
   </div>
 );
 
-const AdvancedSettings = () => (
-  <div className="p-6">
-    <SectionTitle>Advanced Settings</SectionTitle>
-    <p className="text-gray-600">
-      Advanced configuration options. (Coming soon)
-    </p>
-  </div>
-);
+const AdvancedSettings = () => {
+  const [cleared, setCleared] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [cacheSize, setCacheSize] = useState(0);
+
+  // Helper to fetch cache size
+  const fetchCacheSize = async () => {
+    // @ts-ignore
+    const all = await new Promise((resolve) => {
+      chrome.storage.local.get(null, resolve);
+    });
+    const keys = Object.keys(all).filter((k) => k.startsWith('embedding_'));
+    setCacheSize(keys.length);
+  };
+
+  useEffect(() => {
+    fetchCacheSize();
+  }, []);
+
+  const handleClearCache = async () => {
+    setLoading(true);
+    await clearEmbeddingCache();
+    setLoading(false);
+    setCleared(true);
+    setCacheSize(0);
+    setTimeout(() => setCleared(false), 2000);
+  };
+
+  return (
+    <div className="p-6">
+      <SectionTitle>Advanced Settings</SectionTitle>
+      <div className="flex flex-col gap-4 max-w-md">
+        <p className="text-gray-600">Advanced configuration options.</p>
+        <div className="flex items-center gap-4">
+          <Button
+            onClick={handleClearCache}
+            disabled={loading}
+            variant="secondary"
+          >
+            {loading ? 'Clearing Cache...' : 'Clear Embedding Cache'}
+          </Button>
+          <span className="text-sm text-gray-500">Cache size: {cacheSize}</span>
+        </div>
+        {cleared && (
+          <span className="text-green-600 text-sm">
+            Embedding cache cleared!
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Options = () => {
   const [tab, setTab] = useState('profile');
