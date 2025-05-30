@@ -41,11 +41,75 @@ const categories = [
     ]
   },
   {
-    key: 'application',
+    key: 'applicationDetails',
     title: 'Application Details',
     fields: [
+      {
+        key: 'leadership2Years',
+        label: 'Do you have a minimum of 2+ years in a leadership role?',
+        type: 'radio',
+        options: ['Yes', 'No']
+      },
       { key: 'dateAvailable', label: 'Date Available', type: 'date' },
       { key: 'desiredPay', label: 'Desired Pay' }
+    ]
+  },
+  {
+    key: 'diversityConsent',
+    title: 'Diversity & Consent',
+    fields: [
+      {
+        key: 'gender',
+        label: 'Gender',
+        type: 'select',
+        options: [
+          '',
+          'Male',
+          'Female',
+          'Non-binary',
+          'Prefer not to say',
+          'Other'
+        ]
+      },
+      {
+        key: 'genderIdentity',
+        label: 'Gender Identity',
+        type: 'select',
+        options: [
+          '',
+          'Cisgender',
+          'Transgender',
+          'Non-binary',
+          'Prefer not to say',
+          'Other'
+        ]
+      },
+      {
+        key: 'ageBracket',
+        label: 'Age Bracket',
+        type: 'select',
+        options: [
+          '',
+          '18-24',
+          '25-34',
+          '35-44',
+          '45-54',
+          '55-64',
+          '65+',
+          'Prefer not to say'
+        ]
+      },
+      {
+        key: 'disability',
+        label: 'Disability',
+        type: 'select',
+        options: ['', 'Yes', 'No', 'Prefer not to say']
+      },
+      {
+        key: 'allowProcessPersonalInfo',
+        label: 'Allow us to process your personal information',
+        type: 'checkbox'
+      }
     ]
   },
   {
@@ -86,6 +150,19 @@ const categories = [
           'Will you require us to file for a visa petition on your behalf to allow you to work?'
       },
       { key: 'howHeard', label: 'How did you hear about this opportunity?' }
+    ]
+  },
+  {
+    key: 'documents',
+    title: 'Documents',
+    fields: [
+      {
+        key: 'coverLetterText',
+        label: 'Cover Letter (Text)',
+        type: 'textarea'
+      },
+      { key: 'resumeFile', label: 'Resume (File)', type: 'file' },
+      { key: 'coverLetterFile', label: 'Cover Letter (File)', type: 'file' }
     ]
   }
 ];
@@ -378,18 +455,144 @@ const ProfileSection = () => {
             </div>
             {!collapsed[cat.key] && (
               <div className="flex flex-col gap-3 px-4 pb-4">
-                {cat.fields.map(({ key, label, type }) => (
-                  <Input
-                    key={key}
-                    label={label}
-                    type={type || 'text'}
-                    value={profile[key] || ''}
-                    onChange={(e) => handleChange(key, e.target.value)}
-                    onBlur={() => handleBlur(key)}
-                    error={Boolean(errors[key] && touched[key])}
-                    helperText={touched[key] && errors[key] ? errors[key] : ''}
-                  />
-                ))}
+                {cat.fields.map(({ key, label, type, options }) => {
+                  if (type === 'textarea') {
+                    return (
+                      <div key={key} className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-700">
+                          {label}
+                        </label>
+                        <textarea
+                          value={profile[key] || ''}
+                          onChange={(e) => handleChange(key, e.target.value)}
+                          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 border-gray-300 focus:ring-blue-500 min-h-[100px]"
+                        />
+                      </div>
+                    );
+                  }
+                  if (type === 'file') {
+                    const fileName = profile[key + 'Name'] || '';
+                    return (
+                      <div key={key} className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-700">
+                          {label}
+                        </label>
+                        <input
+                          type="file"
+                          onChange={async (e) => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              handleChange(key, ev.target.result);
+                              handleChange(key + 'Name', file.name);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                        {fileName && (
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-gray-600">
+                              {fileName}
+                            </span>
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              className="px-2 py-1 text-xs"
+                              onClick={() => {
+                                handleChange(key, '');
+                                handleChange(key + 'Name', '');
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  if (type === 'radio') {
+                    return (
+                      <div key={key} className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-700">
+                          {label}
+                        </label>
+                        <div className="flex gap-4 mt-1">
+                          {options.map((opt) => (
+                            <label
+                              key={opt}
+                              className="flex items-center gap-1 text-sm"
+                            >
+                              <input
+                                type="radio"
+                                name={key + activeProfileId}
+                                value={opt}
+                                checked={profile[key] === opt}
+                                onChange={(e) =>
+                                  handleChange(key, e.target.value)
+                                }
+                              />
+                              {opt}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                  if (type === 'select') {
+                    return (
+                      <div key={key} className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-700">
+                          {label}
+                        </label>
+                        <select
+                          value={profile[key] || ''}
+                          onChange={(e) => handleChange(key, e.target.value)}
+                          className="border rounded px-2 py-1"
+                        >
+                          {options.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  }
+                  if (type === 'checkbox') {
+                    return (
+                      <div key={key} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={key + activeProfileId}
+                          checked={!!profile[key]}
+                          onChange={(e) => handleChange(key, e.target.checked)}
+                        />
+                        <label
+                          htmlFor={key + activeProfileId}
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          {label}
+                        </label>
+                      </div>
+                    );
+                  }
+                  // Default input
+                  return (
+                    <Input
+                      key={key}
+                      label={label}
+                      type={type || 'text'}
+                      value={profile[key] || ''}
+                      onChange={(e) => handleChange(key, e.target.value)}
+                      onBlur={() => handleBlur(key)}
+                      error={Boolean(errors[key] && touched[key])}
+                      helperText={
+                        touched[key] && errors[key] ? errors[key] : ''
+                      }
+                    />
+                  );
+                })}
                 <div className="flex items-center gap-4 mt-2">
                   <Button
                     type="button"
