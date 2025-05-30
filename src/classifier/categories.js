@@ -293,5 +293,102 @@ export const FIELD_CATEGORIES = [
       'How did you hear about this job?',
       'How heard*'
     ]
+  },
+  {
+    id: 'cover_letter_text',
+    display: 'Cover Letter (Text)',
+    examples: [
+      'Cover Letter',
+      'Cover Letter (Text)',
+      'Paste your cover letter',
+      'Cover letter text',
+      'Enter your cover letter',
+      'Cover letter content',
+      'Cover letter (required)'
+    ]
+  },
+  {
+    id: 'resume_file',
+    display: 'Resume (File)',
+    examples: [
+      'Resume',
+      'Upload Resume',
+      'Resume File',
+      'Attach Resume',
+      'Upload your resume',
+      'Resume (PDF)',
+      'Resume (required)'
+    ]
+  },
+  {
+    id: 'cover_letter_file',
+    display: 'Cover Letter (File)',
+    examples: [
+      'Cover Letter (File)',
+      'Upload Cover Letter',
+      'Attach Cover Letter',
+      'Cover Letter PDF',
+      'Cover Letter Document',
+      'Upload your cover letter',
+      'Cover letter file',
+      'Cover letter (required)'
+    ]
+  },
+  {
+    id: 'leadership_2_years',
+    display: '2+ Years Leadership',
+    examples: [
+      'Do you have a minimum of 2+ years in a leadership role?',
+      '2+ years leadership',
+      'Leadership experience',
+      'Minimum 2 years leadership',
+      '2 years in a leadership role',
+      'Leadership role (2+ years)'
+    ]
+  },
+  {
+    id: 'gender',
+    display: 'Gender',
+    examples: ['Gender', 'Select your gender', 'Gender (optional)']
+  },
+  {
+    id: 'gender_identity',
+    display: 'Gender Identity',
+    examples: [
+      'Gender Identity',
+      'Select your gender identity',
+      'Gender identity (optional)'
+    ]
+  },
+  {
+    id: 'age_bracket',
+    display: 'Age Bracket',
+    examples: [
+      'Age Bracket',
+      'Select your age bracket',
+      'Age group',
+      'Age (optional)'
+    ]
+  },
+  {
+    id: 'disability',
+    display: 'Disability',
+    examples: [
+      'Disability',
+      'Do you have a disability?',
+      'Disability status',
+      'Disability (optional)'
+    ]
+  },
+  {
+    id: 'allow_process_personal_info',
+    display: 'Allow Process Personal Info',
+    examples: [
+      'Allow us to process your personal information',
+      'Consent to process personal information',
+      'Allow processing of personal data',
+      'Process your personal information',
+      'Consent checkbox'
+    ]
   }
 ];
